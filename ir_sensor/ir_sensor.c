@@ -13,35 +13,29 @@ bool lastRightStatus = false;
 bool lastLeftStatus = false;
 bool lastFrontStatus = false;
 
-void initializeIRSensor(){
-
-	P1DIR |= BIT0;	// Set the red (left) LED as output
-	P1DIR |= BIT6;	// Set the green (right) LED as output
-
-
-}
 
 bool isRightActive(unsigned int threshold){
-	unsigned short sample[16];									// Just to analyze the values
+	unsigned short RightSample[16];									// Just to analyze the values
 	unsigned char i = 0;										// index into sample array
 	ADC10CTL0 = 0;											// Turn off ADC subsystem
 	ADC10CTL1 = INCH_4 | ADC10DIV_3 ;						// Channel 4, ADC10CLK/4
 	ADC10AE0 = BIT4;		 								// Make P1.4 analog input
 	ADC10CTL0 = SREF_0 | ADC10SHT_3 | ADC10ON | ENC;		// Vcc & Vss as reference
 
+
 	for(i = 0; i <= 15; i++){
 		ADC10CTL0 |= ADC10SC;									// Start a conversion
 		while(ADC10CTL1 & ADC10BUSY);							// Wait for conversion to complete
-		sample[i] = ADC10MEM;									// collect that 10-bit value
+		RightSample[i] = ADC10MEM;									// collect that 10-bit value
 	}
 
 	//If last check was true, then we'll allow this check to be a slight threshold lower and still be true
-	if(lastRightStatus == true & getRunningAverage(sample) > (threshold-CHANGE_THRESHOLD)){
+	if(lastRightStatus == true & getRunningAverage(RightSample) > (threshold-CHANGE_THRESHOLD)){
 		return true;
 	}
 
 	//Otherwise it must make it to the actual threshold
-	if (getRunningAverage(sample) > threshold){
+	if (getRunningAverage(RightSample) > threshold){
 		lastRightStatus = true;
 		return true;
 	}
@@ -54,26 +48,27 @@ bool isRightActive(unsigned int threshold){
 
 
 bool isLeftActive(unsigned int threshold){
-	unsigned short sample[16];									// Just to analyze the values
+	unsigned short leftSample[16];									// Just to analyze the values
 	unsigned char i = 0;										// index into sample array
+	  // Configure P1.7 to be the ADC input
 	ADC10CTL0 = 0;											// Turn off ADC subsystem
-	ADC10CTL1 = INCH_1 | ADC10DIV_3 ;						// Channel 1, ADC10CLK/4
-	ADC10AE0 = BIT1;		 								// Make P1.1 analog input
+	ADC10CTL1 = INCH_7 | ADC10DIV_3 ;						// Channel 4, ADC10CLK/4
+	ADC10AE0 = BIT7;		 								// Make P1.4 analog input
 	ADC10CTL0 = SREF_0 | ADC10SHT_3 | ADC10ON | ENC;		// Vcc & Vss as reference
 
 	for(i = 0; i <= 15; i++){
 		ADC10CTL0 |= ADC10SC;									// Start a conversion
 		while(ADC10CTL1 & ADC10BUSY);							// Wait for conversion to complete
-		sample[i] = ADC10MEM;									// collect that 10-bit value
+		leftSample[i] = ADC10MEM;									// collect that 10-bit value
 	}
 
 	//If last check was true, then we'll allow this check to be a slight threshold lower and still be true
-	if(lastLeftStatus == true & getRunningAverage(sample) > (threshold-CHANGE_THRESHOLD)){
+	if(lastLeftStatus == true & getRunningAverage(leftSample) > (threshold-CHANGE_THRESHOLD)){
 		return true;
 	}
 
 	//Otherwise it must make it to the actual threshold
-	if (getRunningAverage(sample) > threshold){
+	if (getRunningAverage(leftSample) > threshold){
 		lastLeftStatus = true;
 		return true;
 	}
@@ -87,9 +82,10 @@ bool isLeftActive(unsigned int threshold){
 bool isFrontActive(unsigned int threshold){
 	unsigned short sample[16];									// Just to analyze the values
 	unsigned char i = 0;										// index into sample array
+	  // Configure P1.7 to be the ADC input
 	ADC10CTL0 = 0;											// Turn off ADC subsystem
-	ADC10CTL1 = INCH_2 | ADC10DIV_3 ;						// Channel 4, ADC10CLK/4
-	ADC10AE0 = BIT2;		 								// Make P1.4 analog input
+	ADC10CTL1 = INCH_3 | ADC10DIV_3 ;						// Channel 4, ADC10CLK/4
+	ADC10AE0 = BIT3;		 								// Make P1.4 analog input
 	ADC10CTL0 = SREF_0 | ADC10SHT_3 | ADC10ON | ENC;		// Vcc & Vss as reference
 
 	for(i = 0; i <= 15; i++){
@@ -113,6 +109,9 @@ bool isFrontActive(unsigned int threshold){
 		return false;
 	}
 }
+
+
+
 unsigned int getRunningAverage(unsigned short values[]){
 	int size_of_values = sizeof(values) / sizeof(values[0]);
 	int sum = 0;

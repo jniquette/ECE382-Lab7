@@ -13,7 +13,6 @@
 
 typedef enum { false, true } bool;			//Create Boolean Typedef
 
-void initializeIRSensor();
 
 
 
