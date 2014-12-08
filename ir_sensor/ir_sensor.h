@@ -19,6 +19,8 @@ void initializeIRSensor();
 
 unsigned int getRunningAverage(unsigned short values[]);
 bool isRightActive(unsigned int threshold);
+bool isLeftActive(unsigned int threshold);
+bool isFrontActive(unsigned int threshold);
 
 ////////////////////////////////////////////////////////////////////////////////
 //				CONSTANTS FOR SELF-COMMENTING CODE

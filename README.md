@@ -34,7 +34,6 @@ Right Sensor:
 - Reference Voltage for obstacle at zero inches: 2.791V
 - Reference Voltage for obstacle at six inches (Centered in corridor): 0.670V
 
-
 Vref+	|Vref	|Voltage	|Quantized
 3.3v	|0v	|0.0v	| 	0000000000b
 3.3v	|0v	|1.35v	| 	0110011111b
@@ -42,6 +41,7 @@ Vref+	|Vref	|Voltage	|Quantized
 3.3v	|0v	|1.95v	| 	1001010111b
 3.3v	|0v	|3.3v	| 	1111111111b
 
+Vref/Vref+ * 1024
 
 Consider how you'll setup the ADC10 subsystem. What are the registers you'll need to use? Which bits in those registers are important? What's the initialization sequence you'll need?
 
@@ -89,5 +89,10 @@ Consider the interface you'll create to your sensors. Will you block or use inte
 		else
 			Turn off LED1 and LED2
 	}
+	
+##Troubleshooting
+	I didn't have any issues getting my right sensor to work, but I did encounter some problems getting the front and left sensors to work. With no connection to the MSP430, both sensors operated correctly giving valid analog values between 0 and 3.3 volts. However, when I connected the sensors to the MSP430 on ports 1.1 and 1.0, the voltage between the sensors and the MSP430 was +3.55 volts. Even with no connection to the IR sensor, pin 1.1 was high, so I hypothesized that the issue was with configuring the MSP430.
+	
+	
 ##Documentation Statement
 Nothing to report.

@@ -34,6 +34,14 @@ int main(void) {
 		else
 			RIGHT_LED_OFF;
 
+
+
+
+		if(isLeftActive(512) == true)
+			LEFT_LED_ON;
+		else
+			LEFT_LED_OFF;
+
 	} // end infinite loop
 
 } // end main

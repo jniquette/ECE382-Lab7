@@ -10,6 +10,8 @@
 #include "ir_sensor.h"
 
 bool lastRightStatus = false;
+bool lastLeftStatus = false;
+bool lastFrontStatus = false;
 
 void initializeIRSensor(){
 
@@ -50,6 +52,67 @@ bool isRightActive(unsigned int threshold){
 }
 
 
+
+bool isLeftActive(unsigned int threshold){
+	unsigned short sample[16];									// Just to analyze the values
+	unsigned char i = 0;										// index into sample array
+	ADC10CTL0 = 0;											// Turn off ADC subsystem
+	ADC10CTL1 = INCH_1 | ADC10DIV_3 ;						// Channel 1, ADC10CLK/4
+	ADC10AE0 = BIT1;		 								// Make P1.1 analog input
+	ADC10CTL0 = SREF_0 | ADC10SHT_3 | ADC10ON | ENC;		// Vcc & Vss as reference
+
+	for(i = 0; i <= 15; i++){
+		ADC10CTL0 |= ADC10SC;									// Start a conversion
+		while(ADC10CTL1 & ADC10BUSY);							// Wait for conversion to complete
+		sample[i] = ADC10MEM;									// collect that 10-bit value
+	}
+
+	//If last check was true, then we'll allow this check to be a slight threshold lower and still be true
+	if(lastLeftStatus == true & getRunningAverage(sample) > (threshold-CHANGE_THRESHOLD)){
+		return true;
+	}
+
+	//Otherwise it must make it to the actual threshold
+	if (getRunningAverage(sample) > threshold){
+		lastLeftStatus = true;
+		return true;
+	}
+	else{
+		lastLeftStatus = false;
+		return false;
+	}
+}
+
+
+bool isFrontActive(unsigned int threshold){
+	unsigned short sample[16];									// Just to analyze the values
+	unsigned char i = 0;										// index into sample array
+	ADC10CTL0 = 0;											// Turn off ADC subsystem
+	ADC10CTL1 = INCH_2 | ADC10DIV_3 ;						// Channel 4, ADC10CLK/4
+	ADC10AE0 = BIT2;		 								// Make P1.4 analog input
+	ADC10CTL0 = SREF_0 | ADC10SHT_3 | ADC10ON | ENC;		// Vcc & Vss as reference
+
+	for(i = 0; i <= 15; i++){
+		ADC10CTL0 |= ADC10SC;									// Start a conversion
+		while(ADC10CTL1 & ADC10BUSY);							// Wait for conversion to complete
+		sample[i] = ADC10MEM;									// collect that 10-bit value
+	}
+
+	//If last check was true, then we'll allow this check to be a slight threshold lower and still be true
+	if(lastFrontStatus == true & getRunningAverage(sample) > (threshold-CHANGE_THRESHOLD)){
+		return true;
+	}
+
+	//Otherwise it must make it to the actual threshold
+	if (getRunningAverage(sample) > threshold){
+		lastFrontStatus = true;
+		return true;
+	}
+	else{
+		lastFrontStatus = false;
+		return false;
+	}
+}
 unsigned int getRunningAverage(unsigned short values[]){
 	int size_of_values = sizeof(values) / sizeof(values[0]);
 	int sum = 0;
