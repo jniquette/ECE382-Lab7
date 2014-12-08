@@ -7,6 +7,9 @@
  * 				to robot #47.
  */
 #include "msp430g2553.h"
+#include "ir_sensor.h"
+
+bool lastRightStatus = false;
 
 void initializeIRSensor(){
 
@@ -14,4 +17,36 @@ void initializeIRSensor(){
 	P1DIR |= BIT6;	// Set the green (right) LED as output
 
 
+}
+
+bool isRightActive(){
+	unsigned short sample[16];									// Just to analyze the values
+	unsigned char i = 0;										// index into sample array
+	ADC10CTL0 = 0;											// Turn off ADC subsystem
+	ADC10CTL1 = INCH_4 | ADC10DIV_3 ;						// Channel 4, ADC10CLK/4
+	ADC10AE0 = BIT4;		 								// Make P1.4 analog input
+	ADC10CTL0 = SREF_0 | ADC10SHT_3 | ADC10ON | ENC;		// Vcc & Vss as reference
+
+	for(i = 0; i <= 15; i++){
+		ADC10CTL0 |= ADC10SC;									// Start a conversion
+		while(ADC10CTL1 & ADC10BUSY);							// Wait for conversion to complete
+		sample[i] = ADC10MEM;									// collect that 10-bit value
+	}
+
+
+	if (getRunningAverage(sample) > 0x0200)
+		return true;
+	else
+		return false;
+}
+
+
+unsigned int getRunningAverage(unsigned short values[]){
+	int size_of_values = sizeof(values) / sizeof(values[0]);
+	int sum = 0;
+	unsigned int i = 0;
+	for(i = 0; i<size_of_values; i++){
+		sum += values[i];
+	}
+	return (sum/size_of_values);
 }

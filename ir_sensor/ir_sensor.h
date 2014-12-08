@@ -11,7 +11,14 @@
 #ifndef IR_SENSOR_H_
 #define IR_SENSOR_H_
 
+typedef enum { false, true } bool;			//Create Boolean Typedef
+
 void initializeIRSensor();
+
+
+
+unsigned int getRunningAverage(unsigned short values[]);
+bool isRightActive();
 
 ////////////////////////////////////////////////////////////////////////////////
 //				CONSTANTS FOR SELF-COMMENTING CODE
