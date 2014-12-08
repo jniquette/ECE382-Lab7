@@ -18,7 +18,7 @@ void initializeIRSensor();
 
 
 unsigned int getRunningAverage(unsigned short values[]);
-bool isRightActive();
+bool isRightActive(unsigned int threshold);
 
 ////////////////////////////////////////////////////////////////////////////////
 //				CONSTANTS FOR SELF-COMMENTING CODE
@@ -28,6 +28,7 @@ bool isRightActive();
 #define RIGHT_LED_ON		P1OUT |= BIT6
 #define RIGHT_LED_OFF		P1OUT &= ~BIT6
 
+#define CHANGE_THRESHOLD	25
 
 
 #endif /* IR_SENSOR_H_ */

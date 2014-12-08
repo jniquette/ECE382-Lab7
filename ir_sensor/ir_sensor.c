@@ -19,7 +19,7 @@ void initializeIRSensor(){
 
 }
 
-bool isRightActive(){
+bool isRightActive(unsigned int threshold){
 	unsigned short sample[16];									// Just to analyze the values
 	unsigned char i = 0;										// index into sample array
 	ADC10CTL0 = 0;											// Turn off ADC subsystem
@@ -33,11 +33,20 @@ bool isRightActive(){
 		sample[i] = ADC10MEM;									// collect that 10-bit value
 	}
 
-
-	if (getRunningAverage(sample) > 0x0200)
+	//If last check was true, then we'll allow this check to be a slight threshold lower and still be true
+	if(lastRightStatus == true & getRunningAverage(sample) > (threshold-CHANGE_THRESHOLD)){
 		return true;
-	else
+	}
+
+	//Otherwise it must make it to the actual threshold
+	if (getRunningAverage(sample) > threshold){
+		lastRightStatus = true;
+		return true;
+	}
+	else{
+		lastRightStatus = false;
 		return false;
+	}
 }
 
 

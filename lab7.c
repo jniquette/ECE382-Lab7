@@ -28,8 +28,8 @@ int main(void) {
 	while(1) {
 
 		  // Configure P1.4 to be the ADC input
-
-		if(isRightActive() == true)
+		//Max value = 1023(dec)
+		if(isRightActive(512) == true)
 			RIGHT_LED_ON;
 		else
 			RIGHT_LED_OFF;
