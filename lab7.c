@@ -63,9 +63,9 @@ int main(void) {
 void doMazeMovements(){
 	goForward();
 
-	//while(isFrontActive(700) != true);
-	//stop();
-
+	while(isFrontActive(700) == false);
+	stop();
+	while(isFrontActive(700) == true);
 
 }
 
