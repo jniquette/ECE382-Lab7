@@ -9,6 +9,8 @@
 #define LAB6_H_
 
 void doMazeMovements();
+void calibrateSensors();
+void lightSequence(unsigned char counts);
 
 
 

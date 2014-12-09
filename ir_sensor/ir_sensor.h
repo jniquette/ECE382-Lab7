@@ -21,6 +21,10 @@ bool isRightActive(unsigned int threshold);
 bool isLeftActive(unsigned int threshold);
 bool isFrontActive(unsigned int threshold);
 
+unsigned short getFrontValue();
+unsigned short getLeftValue();
+unsigned short getRightValue();
+
 ////////////////////////////////////////////////////////////////////////////////
 //				CONSTANTS FOR SELF-COMMENTING CODE
 ////////////////////////////////////////////////////////////////////////////////

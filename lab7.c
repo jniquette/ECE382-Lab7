@@ -28,13 +28,18 @@ int main(void) {
 	BCSCTL1 = CALBC1_8MHZ;										// 8MHz clock
 	DCOCTL = CALDCO_8MHZ;
 
+	stop();
+
+//	calibrateSensors();
+
+
+	doMazeMovements();
 
 	while(1) {
 
 
-		doMazeMovements();
 
-		if(isFrontActive(512) == true){
+		if(isFrontActive(480) == true){
 			LEFT_LED_ON;
 			RIGHT_LED_ON;
 		}
@@ -60,14 +65,41 @@ int main(void) {
 
 } // end main
 
-void doMazeMovements(){
-	goForward();
-
-	while(isFrontActive(700) == false);
+void calibrateSensors(){
 	stop();
-	while(isFrontActive(700) == true);
+	lightSequence(10);
+
+	unsigned short forwardWallDistance;
+
+	while(true){
+		forwardWallDistance = getLeftValue();
+		lightSequence(2);
+
+		if(forwardWallDistance != 0){
+			LEFT_LED_OFF;
+		}
+	}
 
 }
 
+void doMazeMovements(){
+	goForward();
 
+	while(getLeftValue() >= 235);
+	stop();
+
+}
+
+void lightSequence(unsigned char counts){
+	unsigned char i = 0;
+	for(i=0; i<counts; i++){
+		LEFT_LED_ON;
+		RIGHT_LED_OFF;
+		_delay_cycles(400000);
+		LEFT_LED_OFF;
+		RIGHT_LED_ON;
+		_delay_cycles(400000);
+	}
+	RIGHT_LED_OFF;
+}
 

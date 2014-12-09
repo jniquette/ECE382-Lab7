@@ -24,7 +24,7 @@ void initMotors(){
     P2SEL |= BIT4;							// P2.4 is associated with TA1CCTL2
 
 	TA1CTL = ID_3 | TASSEL_2 | MC_1;		// Use 1:8 presclar off MCLK
-    TA1CCR0 = 0x0100;						// set signal period
+    TA1CCR0 = 0x2000;						// set signal period
     TA1CCR1 = 0x0008;						// Set an appropriate duty cycle
     TA1CCTL1 = OUTMOD_7;					// set TACCTL1 to Reset / Set mode
     TA1CCR2 = 0x0008;						// set an appropriate duty cycle
@@ -36,8 +36,6 @@ void initMotors(){
 void stop(){
 	DISABLE_RIGHT;
 	DISABLE_LEFT;
-	P1OUT &= ~BIT6;			//Turn Off LEDs
-	P1OUT &= ~BIT0;
 }
 
 void stepForward(){
