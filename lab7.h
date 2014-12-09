@@ -8,7 +8,7 @@
 #ifndef LAB6_H_
 #define LAB6_H_
 
-
+void doMazeMovements();
 
 
 

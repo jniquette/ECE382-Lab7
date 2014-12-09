@@ -7,6 +7,7 @@
 #include "msp430g2553.h"
 #include "lab7.h"
 #include "ir_sensor/ir_sensor.h"
+#include "movements.h"
 
 void initMSP430();
 
@@ -14,6 +15,8 @@ void initMSP430();
 //----------------------------------------------------------------------
 int main(void) {
 
+
+	initMotors();
 
 
 	P1DIR |= BIT0;	// Set the red (left) LED as output
@@ -26,8 +29,10 @@ int main(void) {
 	DCOCTL = CALDCO_8MHZ;
 
 
-
 	while(1) {
+
+
+		doMazeMovements();
 
 		if(isFrontActive(512) == true){
 			LEFT_LED_ON;
@@ -55,7 +60,14 @@ int main(void) {
 
 } // end main
 
+void doMazeMovements(){
+	goForward();
 
+	//while(isFrontActive(700) != true);
+	//stop();
+
+
+}
 
 
 
