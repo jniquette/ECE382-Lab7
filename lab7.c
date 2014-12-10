@@ -33,10 +33,10 @@ int main(void) {
 //	calibrateSensors();
 
 
-	doMazeMovements();
-
 	while(1) {
 
+
+		//doMazeMovements();
 
 
 		if(isFrontActive(480) == true){
