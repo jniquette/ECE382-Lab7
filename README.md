@@ -13,9 +13,6 @@ README	|On-Time: 0 ---- Check Minus ---- Check ---- Check Plus ---- Late: 1Day -
 Total	|	|	|100	|
 
 
-##Purpose
-
-
 ##Prelab
 Include whatever information from this lab you think will be useful in creating your program.
 
