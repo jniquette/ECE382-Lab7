@@ -58,7 +58,8 @@ Consider the hardware interface. Which ADC10 channels will you use? Which pins c
 
 
 Consider the interface you'll create to your sensors. Will you block or use interrupts? Will you convert one sensor at a time or multiple?
-	I'll use polling to check the values of my sensor and use a running average of the last three polls to try and get an accurate value from my IR sensors.
+
+I'll use polling to check the values of my sensor and use a running average of the last three polls to try and get an accurate value from my IR sensors.
 
 	
 ###PseudoCode
@@ -91,8 +92,15 @@ Consider the interface you'll create to your sensors. Will you block or use inte
 	}
 	
 ##Troubleshooting
-	I didn't have any issues getting my right sensor to work, but I did encounter some problems getting the front and left sensors to work. With no connection to the MSP430, both sensors operated correctly giving valid analog values between 0 and 3.3 volts. However, when I connected the sensors to the MSP430 on ports 1.1 and 1.0, the voltage between the sensors and the MSP430 was +3.55 volts. Even with no connection to the IR sensor, pin 1.1 was high, so I hypothesized that the issue was with configuring the MSP430.
-	
-	
+I didn't have any issues getting my right sensor to work, but I did encounter some problems getting the front and left sensors to work. With no connection to the MSP430, both sensors operated correctly giving valid analog values between 0 and 3.3 volts. However, when I connected the sensors to the MSP430 on ports 1.1 and 1.0, the voltage between the sensors and the MSP430 was +3.55 volts. Even with no connection to the IR sensor, pin 1.1 was high, so I hypothesized that the issue was with configuring the MSP430. After about 45 minutes of debugging with Captain Trimble she suggested using different pins. That worked, so now I'm using pins 1.3, 1.4, and 1.7 for my ADC10 inputs.
+
+##Final Results
+In this lab I was able to achieve required functionality by getting the LED lights on the robot to light up when an object nears one or more of the sensors. Additionally I published the code for the IR Sensor library to a separate repository for B Functionality.
+
+
 ##Documentation Statement
-Nothing to report.
+I used Brian Yarbrough's PWM settings to slow my robot down. I think my issue was that my period was too short for there to be any noticable drop in voltage. 
+
+	TA1CCR0 = 1000;	//instead of 0x0100
+	TA1CCR1 = 500;	//instead of 0x0008
+	TA1CCR2 = 500;	//instead of 0x0008
